@@ -17,6 +17,13 @@ class PyBind:
         self.wait_thread_active = True
         self.wait_thread = threading.Thread(target=self.start_wait_thread, args=(self.plugins, self.binds,), daemon=True).start()
 
+        self.main_thread_active = True
+        
+        while self.main_thread_active:
+            time.sleep(1)
+
+        logging.info("Program terminated successfully")
+
     def load_plugins(self):
         return {
             name: importlib.import_module("plugins." + name)
@@ -59,6 +66,4 @@ if __name__ == "__main__":
 
     # win = tk.Tk()
     # win.mainloop()
-    while True:
-        time.sleep(1)
     # start_wait_thread(PLUGINS, BINDS)
