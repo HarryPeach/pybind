@@ -5,5 +5,5 @@ import subprocess
 import logging
 
 def call(args):
-    print(f"I was called with: {args}")
+    logging.debug(f"Called with args: {args}")
     subprocess.call(args)

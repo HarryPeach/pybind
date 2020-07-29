@@ -3,6 +3,7 @@ import keyboard
 import pkgutil
 import logging
 
+# TODO: Load binds from user config
 # Format: keybind, plugin, args
 BINDS = [("ctrl+shift+x", "run", "notepad.exe")]
 
@@ -14,11 +15,15 @@ def main():
     }
 
     for bind in BINDS:
-        logging.debug(f"Creating hotkey '{bind[0]}' for script '{bind[1]} with args: '{bind[2]}''")
+        if(bind[1] not in plugins.keys()):
+            logging.warning(f"Attempted bind creation for plugin '{bind[1]}' but it didn't exist.")
+            continue
+
         keyboard.add_hotkey(bind[0], plugins[bind[1]].call, args=[bind[2]])
+        logging.debug(f"Created hotkey '{bind[0]}' for script '{bind[1]}' with args: '{bind[2]}'")
 
     keyboard.wait()
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(format="[%(levelname)s] (%(pathname)s) - %(message)s",level=logging.DEBUG)
     main()
