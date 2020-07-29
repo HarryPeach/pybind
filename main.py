@@ -5,7 +5,7 @@ import logging
 import csv
 import threading
 import tkinter as tk
-from tkinter import Listbox, END
+from tkinter import Listbox, Button, Frame, END, ANCHOR, TOP, BOTTOM, BOTH, LEFT, RIGHT
 import time
 
 class PyBind:
@@ -25,21 +25,40 @@ class PyBind:
         self.window.minsize(300, 200)
         self.window.geometry("300x200")
 
-        self.create_window()
+        self._create_window()
 
         self.window.mainloop()
 
         logging.info("Program terminated successfully")
 
-    def add_bind(self, keybind, plugin, args):
-        pass
+    def _create_window(self):
+        top = Frame(self.window)
+        bottom = Frame(self.window)
+        top.pack(side=TOP)
+        bottom.pack(side=BOTTOM, fill=BOTH, expand=True)
 
-    def create_window(self):
         listbox = Listbox(self.window, width=300)
-        listbox.pack()
+        listbox.pack(in_=top, side=LEFT)
+
+        delete_button = Button(self.window, text="Delete", command=lambda: self._delete_bind_from_listbox(listbox))
+        delete_button.pack(in_=bottom, side=LEFT)
+
+        apply_button = Button(self.window, text="Apply", command=lambda: self._apply_gui_changes())
+        apply_button.pack(in_=bottom, side=RIGHT)
 
         for item in self.binds:
-            listbox.insert(END, item)
+            listbox.insert(END, str(item))
+
+    def _delete_bind_from_listbox(self, listbox):
+        for item in listbox.curselection():
+            logging.debug(f"Removing item: {item}")
+            listbox.delete(item)
+
+    def _add_bind_to_listbox(self, keybind, plugin, args):
+        pass
+
+    def _apply_gui_changes(self):
+        logging.info("Applying gui changes to binds file.")
 
     def load_plugins(self):
         return {
