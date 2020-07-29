@@ -8,6 +8,7 @@ import tkinter as tk
 from tkinter import Listbox, Button, Frame, END, ANCHOR, TOP, BOTTOM, BOTH, LEFT, RIGHT
 import time
 import os
+from add_item import AddItemWindow
 
 WINDOW_TITLE = "PyBind"
 
@@ -54,17 +55,28 @@ class PyBind:
             listbox.insert(END, str(item))
 
     def _delete_bind_from_listbox(self, listbox):
+        # Perform no action if nothing is selected
+        if len(listbox.curselection()) == 0:
+            return
+
         self.window.title(f"*{WINDOW_TITLE}")
         for item in listbox.curselection():
             logging.debug(f"Removing item: {item}")
             listbox.delete(item)
 
     def _add_bind_to_listbox(self):
+        result = AddItemWindow(self).show()
+        print(result)
         pass
 
     def _apply_gui_changes(self, listbox):
-        self.window.title(WINDOW_TITLE)
         gui_list = list(listbox.get(0, END))
+        
+        # If the list is empty, do nothing
+        if len(gui_list) == 0:
+            return
+
+        self.window.title(WINDOW_TITLE)
         csv_list = []
 
         with open("binds.csv", "r+") as csvfile:
