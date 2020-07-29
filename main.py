@@ -21,8 +21,6 @@ class PyBind:
         self.wait_thread_active = True
         self.wait_thread = threading.Thread(target=self.start_wait_thread, args=(self.plugins, self.binds,), daemon=True).start()
 
-        self.main_thread_active = True
-
         self.window = tk.Tk()
         self.window.title(WINDOW_TITLE)
         self.window.minsize(300, 200)
@@ -43,10 +41,13 @@ class PyBind:
         listbox = Listbox(self.window, width=300)
         listbox.pack(in_=top, side=LEFT)
 
+        add_button = Button(self.window, text="Add", command=lambda: self._add_bind_to_listbox())
+        add_button.pack(in_=bottom, side=LEFT)
+
         delete_button = Button(self.window, text="Delete", command=lambda: self._delete_bind_from_listbox(listbox))
         delete_button.pack(in_=bottom, side=LEFT)
 
-        apply_button = Button(self.window, text="Apply", command=lambda: self._apply_gui_changes(listbox))
+        apply_button = Button(self.window, text="Commit Changes", command=lambda: self._apply_gui_changes(listbox))
         apply_button.pack(in_=bottom, side=RIGHT)
 
         for item in self.binds:
@@ -58,7 +59,7 @@ class PyBind:
             logging.debug(f"Removing item: {item}")
             listbox.delete(item)
 
-    def _add_bind_to_listbox(self, keybind, plugin, args):
+    def _add_bind_to_listbox(self):
         pass
 
     def _apply_gui_changes(self, listbox):
@@ -137,5 +138,3 @@ class PyBind:
 if __name__ == "__main__":
     logging.basicConfig(format="[%(levelname)s] (%(pathname)s) - %(message)s",level=logging.DEBUG)
     PYBIND = PyBind()
-
-    # start_wait_thread(PLUGINS, BINDS)

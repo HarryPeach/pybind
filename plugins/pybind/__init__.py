@@ -12,8 +12,7 @@ def call(pybind, args):
     if args == "reload_binds":
         reload_binds(pybind)
     if args == "stop":
-        # pybind.wait_thread_active = False
-        pybind.main_thread_active = False
+        pybind.window.quit()
         # TODO: stop tk loop
         logging.info("Gracefully stopping pybind")
     else:
