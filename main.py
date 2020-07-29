@@ -5,6 +5,7 @@ import logging
 import csv
 import threading
 import tkinter as tk
+from tkinter import Listbox, END
 import time
 
 class PyBind:
@@ -18,11 +19,27 @@ class PyBind:
         self.wait_thread = threading.Thread(target=self.start_wait_thread, args=(self.plugins, self.binds,), daemon=True).start()
 
         self.main_thread_active = True
-        
-        while self.main_thread_active:
-            time.sleep(1)
+
+        self.window = tk.Tk()
+        self.window.title("pybind")
+        self.window.minsize(300, 200)
+        self.window.geometry("300x200")
+
+        self.create_window()
+
+        self.window.mainloop()
 
         logging.info("Program terminated successfully")
+
+    def add_bind(self, keybind, plugin, args):
+        pass
+
+    def create_window(self):
+        listbox = Listbox(self.window, width=300)
+        listbox.pack()
+
+        for item in self.binds:
+            listbox.insert(END, item)
 
     def load_plugins(self):
         return {
@@ -64,6 +81,4 @@ if __name__ == "__main__":
     logging.basicConfig(format="[%(levelname)s] (%(pathname)s) - %(message)s",level=logging.DEBUG)
     PYBIND = PyBind()
 
-    # win = tk.Tk()
-    # win.mainloop()
     # start_wait_thread(PLUGINS, BINDS)
