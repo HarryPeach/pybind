@@ -13,10 +13,17 @@ def load_plugins():
 
 def load_binds(file):
     binds = []
-    with open("binds.csv", 'r') as csvfile:
-        reader = csv.reader(csvfile, delimiter=",")
-        for row in reader:
-            binds.append((row[0], row[1], row[2]))
+    try:
+        with open("binds.csv", 'r+') as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                if len(row) == 3:
+                    binds.append((row[0], row[1], row[2]))
+    except FileNotFoundError:
+        logging.critical("There was no binds.csv, so one was created. Please populate it and re-run the program.")
+        with open("binds.csv", "w") as _: pass
+        exit(0)
+
     return binds
 
 def main(plugins, binds):
