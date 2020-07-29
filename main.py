@@ -7,6 +7,9 @@ import threading
 import tkinter as tk
 from tkinter import Listbox, Button, Frame, END, ANCHOR, TOP, BOTTOM, BOTH, LEFT, RIGHT
 import time
+import os
+
+WINDOW_TITLE = "PyBind"
 
 class PyBind:
     def __init__(self):
@@ -21,7 +24,7 @@ class PyBind:
         self.main_thread_active = True
 
         self.window = tk.Tk()
-        self.window.title("pybind")
+        self.window.title(WINDOW_TITLE)
         self.window.minsize(300, 200)
         self.window.geometry("300x200")
 
@@ -43,13 +46,14 @@ class PyBind:
         delete_button = Button(self.window, text="Delete", command=lambda: self._delete_bind_from_listbox(listbox))
         delete_button.pack(in_=bottom, side=LEFT)
 
-        apply_button = Button(self.window, text="Apply", command=lambda: self._apply_gui_changes())
+        apply_button = Button(self.window, text="Apply", command=lambda: self._apply_gui_changes(listbox))
         apply_button.pack(in_=bottom, side=RIGHT)
 
         for item in self.binds:
             listbox.insert(END, str(item))
 
     def _delete_bind_from_listbox(self, listbox):
+        self.window.title(f"*{WINDOW_TITLE}")
         for item in listbox.curselection():
             logging.debug(f"Removing item: {item}")
             listbox.delete(item)
@@ -57,8 +61,38 @@ class PyBind:
     def _add_bind_to_listbox(self, keybind, plugin, args):
         pass
 
-    def _apply_gui_changes(self):
-        logging.info("Applying gui changes to binds file.")
+    def _apply_gui_changes(self, listbox):
+        self.window.title(WINDOW_TITLE)
+        gui_list = list(listbox.get(0, END))
+        csv_list = []
+
+        with open("binds.csv", "r+") as csvfile:
+            reader = csv.reader(csvfile)
+            for item in reader:
+                csv_list.append(tuple(item))
+
+        if os.path.exists("binds.csv.bak"):
+            os.remove("binds.csv.bak")
+        os.rename("binds.csv", "binds.csv.bak")
+
+        with open("binds.csv", "w+", newline="") as csvfile:
+            writer = csv.writer(csvfile)
+            # For each item in the intersection of the GUI and binds.csv lists
+            # (i.e. for each item that should remain)
+            for item in [value for value in csv_list if str(value) in gui_list]:
+                logging.debug(f"Writing item to new binds.csv: {item}")
+                writer.writerow(item)
+
+        os.remove("binds.csv.bak")
+
+        # TODO: reload binds
+        # TODO: Refresh listbox
+
+        # print(gui_list)
+        # print(csv_list)
+        # print([value for value in gui_list if value in csv_list] )
+
+        logging.info("Applying GUI changes to binds file.")
 
     def load_plugins(self):
         return {
