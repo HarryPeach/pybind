@@ -65,9 +65,8 @@ class PyBind:
             listbox.delete(item)
 
     def _add_bind_to_listbox(self):
-        result = AddItemWindow(self).show()
-        print(result)
-        pass
+        item_window = AddItemWindow(self)
+        logging.debug(f"Dialog returned: {item_window.return_val}")
 
     def _apply_gui_changes(self, listbox):
         gui_list = list(listbox.get(0, END))
