@@ -85,12 +85,8 @@ class PyBind:
 
         os.remove("binds.csv.bak")
 
-        # TODO: reload binds
-        # TODO: Refresh listbox
-
-        # print(gui_list)
-        # print(csv_list)
-        # print([value for value in gui_list if value in csv_list] )
+        self.reload_binds()
+        # TODO: Refresh listbox in case there were duplicate binds that still exist in GUI
 
         logging.info("Applying GUI changes to binds file.")
 
@@ -115,6 +111,14 @@ class PyBind:
             exit(0)
 
         return binds
+
+    def reload_binds(self):
+        logging.info("Attempting to reload keybinds")
+        self.binds = self.load_binds("binds.csv")
+        self.wait_thread_active = False
+        keyboard.unhook_all_hotkeys()
+        self.wait_thread = threading.Thread(target=self.start_wait_thread, args=(self.plugins, self.binds,), daemon=True).start()
+        self.wait_thread_active = True
 
     def start_wait_thread(self, plugins, binds):
         logging.info("Assigning hotkeys")
