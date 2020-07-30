@@ -8,6 +8,7 @@ import tkinter as tk
 from tkinter import Listbox, Button, Frame, END, ANCHOR, TOP, BOTTOM, BOTH, LEFT, RIGHT
 import time
 import os
+import ast
 from add_item import AddItemWindow
 
 WINDOW_TITLE = "PyBind"
@@ -42,7 +43,7 @@ class PyBind:
         listbox = Listbox(self.window, width=300)
         listbox.pack(in_=top, side=LEFT)
 
-        add_button = Button(self.window, text="Add", command=lambda: self._add_bind_to_listbox())
+        add_button = Button(self.window, text="Add", command=lambda: self._add_bind_to_listbox(listbox))
         add_button.pack(in_=bottom, side=LEFT)
 
         delete_button = Button(self.window, text="Delete", command=lambda: self._delete_bind_from_listbox(listbox))
@@ -64,10 +65,15 @@ class PyBind:
             logging.debug(f"Removing item: {item}")
             listbox.delete(item)
 
-    def _add_bind_to_listbox(self):
+    def _add_bind_to_listbox(self, listbox):
         item_window = AddItemWindow(self)
         if not hasattr(item_window, "return_val"):
             return
+        
+        self.window.title(f"*{WINDOW_TITLE}")
+        listbox.insert(END, str(item_window.return_val))
+
+
         logging.debug(f"Dialog returned: {item_window.return_val}")
 
     def _apply_gui_changes(self, listbox):
@@ -78,12 +84,6 @@ class PyBind:
             return
 
         self.window.title(WINDOW_TITLE)
-        csv_list = []
-
-        with open("binds.csv", "r+") as csvfile:
-            reader = csv.reader(csvfile)
-            for item in reader:
-                csv_list.append(tuple(item))
 
         if os.path.exists("binds.csv.bak"):
             os.remove("binds.csv.bak")
@@ -91,11 +91,9 @@ class PyBind:
 
         with open("binds.csv", "w+", newline="") as csvfile:
             writer = csv.writer(csvfile)
-            # For each item in the intersection of the GUI and binds.csv lists
-            # (i.e. for each item that should remain)
-            for item in [value for value in csv_list if str(value) in gui_list]:
+            for item in gui_list:
                 logging.debug(f"Writing item to new binds.csv: {item}")
-                writer.writerow(item)
+                writer.writerow(ast.literal_eval(item))
 
         os.remove("binds.csv.bak")
 
