@@ -11,7 +11,7 @@ import os
 import ast
 from add_item import AddItemWindow
 
-WINDOW_TITLE = "PyBind"
+WINDOW_TITLE = "PyBind GUI v0.1.0"
 
 class PyBind:
     def __init__(self):
