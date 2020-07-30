@@ -1,5 +1,5 @@
 # Pybind
-# An extensible, global, Python hotkey tool
+```A global and extensible Python hotkey tool```
 
 Pybind allows you to setup any keybind globally on your system, and hook it up to Python plugins.
 
