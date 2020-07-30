@@ -99,6 +99,7 @@ class PyBind:
 
         self.reload_binds()
         # TODO: Refresh listbox in case there were duplicate binds that still exist in GUI
+        # Alternatively convert the binds list to a set
 
         logging.info("Applying GUI changes to binds file.")
 
