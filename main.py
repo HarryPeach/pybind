@@ -66,6 +66,8 @@ class PyBind:
 
     def _add_bind_to_listbox(self):
         item_window = AddItemWindow(self)
+        if not hasattr(item_window, "return_val"):
+            return
         logging.debug(f"Dialog returned: {item_window.return_val}")
 
     def _apply_gui_changes(self, listbox):

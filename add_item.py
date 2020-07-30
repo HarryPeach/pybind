@@ -17,11 +17,11 @@ class AddItemWindow:
 
         plugin_label = Label(self.top_level, text="plugin")
         plugin_label.pack()
-        plugin_textbox = StringVar()
-        plugin_textbox.set(list(pybind.plugins.keys())[0])
+        self.plugin_var = StringVar()
+        self.plugin_var.set(list(pybind.plugins.keys())[0])
         # self.plugin_input = Entry(self.top_level, width=15, textvariable=plugin_textbox)
-        self.plugin_input = OptionMenu(self.top_level, plugin_textbox, *pybind.plugins.keys())
-        self.plugin_input.pack()
+        plugin_input = OptionMenu(self.top_level, self.plugin_var, *pybind.plugins.keys())
+        plugin_input.pack()
 
         argument_label = Label(self.top_level, text="argument")
         argument_label.pack()
@@ -36,7 +36,7 @@ class AddItemWindow:
     def _add_bind(self):
         attrs = []
         attrs.append(self.keybind_input.get())
-        attrs.append(self.plugin_input.get())
+        attrs.append(self.plugin_var.get())
         attrs.append(self.argument_input.get())
         self.return_val = tuple(attrs)
         self.top_level.destroy()
