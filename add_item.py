@@ -41,10 +41,16 @@ class AddItemWindow:
         self.top_level.wait_window()
 
     def _get_keybind(self):
+        """
+        Waits for a keybind, then inserts it into the input box
+        """
         self.keybind_input.delete(0, tk.END)
         self.keybind_input.insert(0, keyboard.read_hotkey())
 
     def _add_bind(self):
+        """
+        Gets bind information from the dialog, and returns
+        """
         attrs = []
         attrs.append(self.keybind_input.get())
         attrs.append(self.plugin_var.get())

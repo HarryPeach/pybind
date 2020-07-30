@@ -13,7 +13,6 @@ def call(pybind, args):
         reload_binds(pybind)
     elif args == "stop":
         pybind.window.quit()
-        # TODO: stop tk loop
         logging.info("Gracefully stopping pybind")
     else:
         logging.warn(f"Plugin was called with invalid arguments: {args}")

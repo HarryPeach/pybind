@@ -35,6 +35,9 @@ class PyBind:
         logging.info("Program terminated successfully")
 
     def _create_window(self):
+        """
+        Creates and packs the core GUI window
+        """
         top = Frame(self.window)
         bottom = Frame(self.window)
         top.pack(side=TOP)
@@ -56,6 +59,12 @@ class PyBind:
             listbox.insert(END, str(item))
 
     def _delete_bind_from_listbox(self, listbox):
+        """Deletes a keybind from the listbox
+
+        Args:
+            listbox (tkinter.Listbox): the listbox to delete the bind from
+        """
+
         # Perform no action if nothing is selected
         if len(listbox.curselection()) == 0:
             return
@@ -66,6 +75,11 @@ class PyBind:
             listbox.delete(item)
 
     def _add_bind_to_listbox(self, listbox):
+        """Adds a keybind to the given listbox
+
+        Args:
+            listbox (tkinter.Listbox): the listbox to add the binds to
+        """
         item_window = AddItemWindow(self)
         if not hasattr(item_window, "return_val"):
             return
@@ -77,6 +91,12 @@ class PyBind:
         logging.debug(f"Dialog returned: {item_window.return_val}")
 
     def _apply_gui_changes(self, listbox):
+        """Commits the changes made to the GUI to the pybind program
+
+        Args:
+            listbox (tkinter.Listbox): the listbox to apply changes from
+        """
+
         gui_list = list(listbox.get(0, END))
         
         # If the list is empty, do nothing
@@ -104,6 +124,9 @@ class PyBind:
         logging.info("Applying GUI changes to binds file.")
 
     def load_plugins(self):
+        """
+        Loads all the plugins found in the plugins folder
+        """
         return {
             name: importlib.import_module("plugins." + name)
             for finder, name, ispkg
@@ -111,6 +134,14 @@ class PyBind:
         }
 
     def load_binds(self, file):
+        """Loads binds from a csv file and applies them to the program
+
+        Args:
+            file (string): location of the csv input
+
+        Returns:
+            list: A list of binds in the bind-tuple format
+        """
         binds = []
         try:
             with open("binds.csv", 'r+') as csvfile:
@@ -126,6 +157,9 @@ class PyBind:
         return binds
 
     def reload_binds(self):
+        """
+        Reloads binds from the default file into the program
+        """
         logging.info("Attempting to reload keybinds")
         self.binds = self.load_binds("binds.csv")
         self.wait_thread_active = False
@@ -134,6 +168,12 @@ class PyBind:
         self.wait_thread_active = True
 
     def start_wait_thread(self, plugins, binds):
+        """Starts the keybind detection thread
+
+        Args:
+            plugins (list): the list of plugins available
+            binds (list): the list of binds to hook
+        """
         logging.info("Assigning hotkeys")
         for bind in binds:
             if(bind[1] not in plugins.keys()):
