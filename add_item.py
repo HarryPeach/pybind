@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Label, StringVar, Entry, Button
+from tkinter import Label, StringVar, Entry, Button, OptionMenu
 
 class AddItemWindow:
     def __init__(self, pybind):
@@ -18,7 +18,9 @@ class AddItemWindow:
         plugin_label = Label(self.top_level, text="plugin")
         plugin_label.pack()
         plugin_textbox = StringVar()
-        self.plugin_input = Entry(self.top_level, width=15, textvariable=plugin_textbox)
+        plugin_textbox.set(list(pybind.plugins.keys())[0])
+        # self.plugin_input = Entry(self.top_level, width=15, textvariable=plugin_textbox)
+        self.plugin_input = OptionMenu(self.top_level, plugin_textbox, *pybind.plugins.keys())
         self.plugin_input.pack()
 
         argument_label = Label(self.top_level, text="argument")
