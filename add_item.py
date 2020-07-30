@@ -3,8 +3,8 @@ import keyboard
 from tkinter import Label, StringVar, Entry, Button, OptionMenu, Frame
 
 class AddItemWindow:
-    def __init__(self, pybind):
-        self.top_level = tk.Toplevel(pybind.window)
+    def __init__(self, parent, pybind):
+        self.top_level = tk.Toplevel(parent.window)
         self.top_level.title("Add bind")
         self.top_level.minsize(200, 200)
         self.top_level.geometry("200x200")

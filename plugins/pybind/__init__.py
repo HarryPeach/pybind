@@ -12,8 +12,8 @@ def call(pybind, args):
     if args == "reload_binds":
         reload_binds(pybind)
     elif args == "stop":
-        pybind.window.quit()
         logging.info("Gracefully stopping pybind")
+        pybind.exit()
     else:
         logging.warn(f"Plugin was called with invalid arguments: {args}")
     
