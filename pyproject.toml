@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "Pybind"
+version = "0.1.0"
+description = "A global and extensible Python hotkey tool"
+authors = ["Harry Peach"]
+license = "GPLv3"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+keyboard = "^0.13.5"
+
+[tool.poetry.dev-dependencies]
+autopep8 = "^1.5.7"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
