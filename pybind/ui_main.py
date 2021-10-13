@@ -4,10 +4,11 @@ import csv
 import ast
 import tkinter as tk
 
-from add_item import AddItemWindow
+from pybind.add_item import AddItemWindow
 from tkinter import Listbox, Button, Frame, END, ANCHOR, TOP, BOTTOM, BOTH, LEFT, RIGHT
 
 WINDOW_TITLE = "PyBind GUI v0.1.0"
+
 
 class MainUI:
     def __init__(self, pybind):
@@ -24,13 +25,16 @@ class MainUI:
         listbox = Listbox(self.window, width=300)
         listbox.pack(in_=top, side=LEFT)
 
-        add_button = Button(self.window, text="Add", command=lambda: self._add_bind_to_listbox(listbox, pybind))
+        add_button = Button(self.window, text="Add",
+                            command=lambda: self._add_bind_to_listbox(listbox, pybind))
         add_button.pack(in_=bottom, side=LEFT)
 
-        delete_button = Button(self.window, text="Delete", command=lambda: self._delete_bind_from_listbox(listbox))
+        delete_button = Button(self.window, text="Delete",
+                               command=lambda: self._delete_bind_from_listbox(listbox))
         delete_button.pack(in_=bottom, side=LEFT)
 
-        apply_button = Button(self.window, text="Commit Changes", command=lambda: self._apply_gui_changes(listbox, pybind))
+        apply_button = Button(self.window, text="Commit Changes",
+                              command=lambda: self._apply_gui_changes(listbox, pybind))
         apply_button.pack(in_=bottom, side=RIGHT)
 
         for item in pybind.binds:
@@ -61,10 +65,9 @@ class MainUI:
         item_window = AddItemWindow(self, pybind)
         if not hasattr(item_window, "return_val"):
             return
-        
+
         self.window.title(f"*{WINDOW_TITLE}")
         listbox.insert(END, str(item_window.return_val))
-
 
         logging.debug(f"Dialog returned: {item_window.return_val}")
 
@@ -76,7 +79,7 @@ class MainUI:
         """
 
         gui_list = list(listbox.get(0, END))
-        
+
         # If the list is empty, do nothing
         if len(gui_list) == 0:
             return
