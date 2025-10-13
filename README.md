@@ -39,7 +39,6 @@ def call(arguments):
 ```
 
 3. Add bind: `ctrl+shift+p, your_plugin, args`
-4. Restart
 
 ## Notes
 
