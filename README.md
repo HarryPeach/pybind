@@ -3,22 +3,45 @@
 
 Pybind allows you to setup any keybind globally on your system, and hook it up to Python plugins.
 
-## Usage
+## Installation
 
-1. Run the program once, or create a binds.csv file
-2. Add a bind in the following format:
+```bash
+git clone https://github.com/Brenda-Machado/pybind
+cd pybind
+poetry install
+poetry run python -m pybind
+```
 
-```keybind, plugin, arguments```
+## Configuration
 
-For instance, if you want to run notepad upon pressing CTRL + SHIFT + X: you would use:
+Create or edit `binds.csv`:
 
-```ctrl+shift+x, run, notepad.exe```
+```
+keybind, plugin, arguments
+```
 
-3. Run the program
-   1. Install Poetry
-   2. Run `poetry install` in the root dir to install dependencies
-   3. Run `poetry run python -m pybind` to start the program
-## Creating a plugin
-1. Add a new module to the plugins folder.
-2. In the ```__init__.py``` create a function called ```call``` that takes one argument. This is the arguments passed by the user.
-3. Create some binds and restart the program, your plugin should be detected and imported.
+**Example:**
+If you want to run notepad upon pressing `CTRL + SHIFT + X`, you would use:
+```
+ctrl+shift+x, run, notepad.exe
+ctrl+alt+c, run, calc.exe
+```
+
+## Creating Plugins
+
+1. Create `plugins/your_plugin/__init__.py`
+2. Define the `call` function:
+
+```python
+def call(arguments):
+    # Your code here
+    pass
+```
+
+3. Add bind: `ctrl+shift+p, your_plugin, args`
+
+## Notes
+
+- Use lowercase modifiers: `ctrl`, `shift`, `alt`, `win`
+- Combine with `+`: `ctrl+shift+x`
+- Plugin name must match folder name
